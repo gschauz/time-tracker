@@ -17,6 +17,7 @@ BUILD="$(cat "$ROOT/BUILD_NUMBER")"
 export CLANG_MODULE_CACHE_PATH="$SCRATCH/module-cache"
 export TIME_TRACKER_BUILD_DIR="$SCRATCH"
 export TIME_TRACKER_APP_PATH="$STAGED"
+manage_app() { swift -target "$(uname -m)-apple-macosx13.0" "$ROOT/scripts/manage-app.swift" "$@"; }
 
 if [[ -d "$APP" ]]; then
     INSTALLED_BUILD=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$APP/Contents/Info.plist")
@@ -28,8 +29,8 @@ fi
 
 bash "$ROOT/scripts/build.sh"
 codesign --verify --deep --strict "$STAGED"
-swift "$ROOT/scripts/manage-app.swift" stop "$APP" "$LEGACY" "$PREVIEW"
-swift "$ROOT/scripts/manage-app.swift" install "$STAGED" "$APP" "$PREVIOUS"
+manage_app stop "$APP" "$LEGACY" "$PREVIEW"
+manage_app install "$STAGED" "$APP" "$PREVIOUS"
 rm -f "$STATUS"
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$APP"
 open "$APP" --args --update-status-file "$STATUS"
@@ -51,12 +52,12 @@ except Exception as error:
     sys.exit(1)
 PY
 then
-    swift "$ROOT/scripts/manage-app.swift" stop "$APP"
+    manage_app stop "$APP"
     if [[ -d "$PREVIOUS" ]]; then
-        swift "$ROOT/scripts/manage-app.swift" rollback "$APP" "$PREVIOUS"
+        manage_app rollback "$APP" "$PREVIOUS"
         open "$APP"
     elif [[ -d "$LEGACY" && ! -L "$LEGACY" ]]; then
-        swift "$ROOT/scripts/manage-app.swift" trash "$APP"
+        manage_app trash "$APP"
         open "$LEGACY"
     fi
     exit 1
@@ -64,6 +65,6 @@ fi
 
 # Keep one portable download and one installed app. Old bundles go to Trash only after verification.
 ditto -c -k --sequesterRsrc --keepParent "$APP" "$OUTPUT/Time Tracker.zip"
-swift "$ROOT/scripts/manage-app.swift" trash "$PREVIOUS" "$LEGACY" "$PREVIEW" "$STAGED"
+manage_app trash "$PREVIOUS" "$LEGACY" "$PREVIEW" "$STAGED"
 if [[ ! -e "$LEGACY" && ! -L "$LEGACY" ]]; then ln -s "$APP" "$LEGACY"; fi
 echo "Installed and running: $APP"

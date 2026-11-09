@@ -33,6 +33,6 @@ PLIST
 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD" "$APP/Contents/Info.plist"
 REVISION="$(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo development)"
 /usr/libexec/PlistBuddy -c "Add :TimeTrackerSourceRevision string $REVISION" "$APP/Contents/Info.plist"
-swift "$ROOT/scripts/make-icon.swift" "$SCRATCH/AppIcon.iconset" "$APP/Contents/Resources/AppIcon.icns"
+swift -target "$(uname -m)-apple-macosx13.0" "$ROOT/scripts/make-icon.swift" "$SCRATCH/AppIcon.iconset" "$APP/Contents/Resources/AppIcon.icns"
 codesign --force --sign - "$APP"
 printf 'Built %s\n' "$APP"
