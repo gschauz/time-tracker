@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 
 let arguments = Array(CommandLine.arguments.dropFirst())
-let manager = FileManager.default
+let manager = Foundation.FileManager.default
 let allowedIDs: Set<String> = ["com.garret.timetracker", "com.garret.timetracker.preview"]
 func fail(_ message: String) -> Never { fputs(message + "\n", stderr); exit(1) }
 func url(_ path: String) -> URL { URL(fileURLWithPath: path).standardizedFileURL }

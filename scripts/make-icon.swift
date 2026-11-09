@@ -2,7 +2,7 @@ import AppKit
 import Foundation
 
 let directory = URL(fileURLWithPath: CommandLine.arguments[1])
-try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+try Foundation.FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 func render(_ pixels: Int) -> Data {
     let bitmap = NSBitmapImageRep(bitmapDataPlanes: nil, pixelsWide: pixels, pixelsHigh: pixels,
                                   bitsPerSample: 8, samplesPerPixel: 4, hasAlpha: true,
