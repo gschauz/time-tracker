@@ -4,7 +4,7 @@ A small native macOS app for freelance projects. Built with SwiftUI and AppKit, 
 
 ## Open the app
 
-Double-click **Time Tracker.app** beside this source folder. You can move it into Applications if you want to keep it there. This build targets Apple silicon Macs running macOS 13 or later and is locally signed.
+Open **Time Tracker** from Applications. The `Time Tracker.app` link beside this source folder points to that same installed copy. This build targets Apple silicon Macs running macOS 13 or later and is locally signed. Find the current version in **Time Tracker → About Time Tracker** or the bottom **…** menu.
 
 ## Track a project
 
@@ -42,14 +42,29 @@ bash scripts/build.sh
 bash scripts/test.sh
 ```
 
-The build script creates `../Time Tracker.app` and applies an ad hoc local signature. Build files go outside the source folder into `../../work/swift-build`; set `TIME_TRACKER_BUILD_DIR` to change that path. Distribution to other Macs would need Developer ID signing and notarization.
+The build script creates a temporary app in `../../work/swift-build/package` and applies an ad hoc local signature. Set `TIME_TRACKER_BUILD_DIR` to change the build directory. Distribution to other Macs would need Developer ID signing and notarization.
+
+## Updates and source history
+
+There is one everyday installation: `/Applications/Time Tracker.app`. Each release has a version in `VERSION` and an increasing number in `BUILD_NUMBER`. Source changes are committed to this local Git repository, and verified releases are tagged `v<VERSION>`. No remote publishing is configured.
+
+For a user-facing update, finish or cancel any editing form, increment the version/build files, run the appropriate checks, and commit the source changes. Then run:
+
+```sh
+bash scripts/update.sh
+git tag "v$(cat VERSION)"
+```
+
+The updater builds and verifies a candidate before gracefully quitting the old app, which saves and pauses timers. It replaces the app in Applications, relaunches it, and checks the **running app’s** version, location, and saved-data load. Only after verification does it move obsolete installed/development/preview bundles to Trash, refresh the output link, and replace the downloadable ZIP. A failed launch/data-load verification restores the previous installation when available. It never force-quits the app or removes project data.
+
+The build script alone does not update a running app. Follow `AGENTS.md` for the full release workflow. Older source versions stay in Git for rollback; older application bundles are not kept alongside the current app.
 
 The automated tests cover independent timers, pause/resume accounting, stop semantics, day boundaries, checkpoint recovery, file round trips and backups, corrupt-file protection, manual entries, and CSV escaping.
 
 To preview example projects without touching saved data:
 
 ```sh
-open -n "../Time Tracker.app" --args --demo
+open -n "/Applications/Time Tracker.app" --args --demo
 ```
 
-Demo changes are kept in memory and discarded on quit.
+Demo changes are kept in memory and discarded on quit. Quit the demo instance after previewing; do not use it for real tracking.

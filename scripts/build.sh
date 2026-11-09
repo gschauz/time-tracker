@@ -2,7 +2,10 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH="${TIME_TRACKER_BUILD_DIR:-$ROOT/../../work/swift-build}"
-APP="$ROOT/../Time Tracker.app"
+APP="${TIME_TRACKER_APP_PATH:-$SCRATCH/package/Time Tracker.app}"
+VERSION="$(cat "$ROOT/VERSION")"
+BUILD="$(cat "$ROOT/BUILD_NUMBER")"
+[[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$BUILD" =~ ^[0-9]+$ ]] || { echo 'Invalid release version.' >&2; exit 1; }
 mkdir -p "$SCRATCH" "$APP/Contents/MacOS" "$APP/Contents/Resources"
 export CLANG_MODULE_CACHE_PATH="$SCRATCH/module-cache"
 swift build --disable-sandbox --cache-path "$SCRATCH/cache" --config-path "$SCRATCH/config" --security-path "$SCRATCH/security" --package-path "$ROOT" --scratch-path "$SCRATCH" -c release
@@ -26,6 +29,10 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
   <key>NSPrincipalClass</key><string>NSApplication</string>
 </dict></plist>
 PLIST
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$APP/Contents/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD" "$APP/Contents/Info.plist"
+REVISION="$(git -C "$ROOT" rev-parse --short HEAD 2>/dev/null || echo development)"
+/usr/libexec/PlistBuddy -c "Add :TimeTrackerSourceRevision string $REVISION" "$APP/Contents/Info.plist"
 swift "$ROOT/scripts/make-icon.swift" "$SCRATCH/AppIcon.iconset" "$APP/Contents/Resources/AppIcon.icns"
 codesign --force --sign - "$APP"
 printf 'Built %s\n' "$APP"

@@ -104,6 +104,8 @@ struct DashboardView: View {
             Text(store.runningCount > 0 ? "Timers keep running when you close this window" : "Saved on this Mac · Pauses when your Mac sleeps")
             Spacer()
             Menu {
+                Text(AppVersion.label)
+                Divider()
                 Button("Export All Time…") { store.exportCSV() }.disabled(store.projects.isEmpty)
                 Button("Show Data in Finder", action: store.revealData)
                 Divider()

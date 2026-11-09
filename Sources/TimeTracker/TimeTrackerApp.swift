@@ -20,6 +20,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             self?.store.pauseAll(reason: "Your timers paused when your Mac went to sleep. Resume a project when you’re ready.")
         }
         showDashboard()
+        reportUpdateStatus()
+    }
+
+    private func reportUpdateStatus() {
+        guard let index = CommandLine.arguments.firstIndex(of: "--update-status-file"),
+              CommandLine.arguments.indices.contains(index + 1) else { return }
+        let destination = URL(fileURLWithPath: CommandLine.arguments[index + 1])
+        do {
+            let status: [String: Any] = ["appPath": Bundle.main.bundleURL.path,
+                                       "pid": ProcessInfo.processInfo.processIdentifier,
+                                       "version": AppVersion.version, "build": AppVersion.build,
+                                       "projectCount": store.projects.count, "loadFailed": store.loadFailed]
+            try JSONSerialization.data(withJSONObject: status, options: [.sortedKeys]).write(to: destination, options: .atomic)
+        } catch { NSLog("Could not report update status: %@", error.localizedDescription) }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
@@ -77,6 +91,9 @@ struct TimeTrackerApp: App {
         }
         .menuBarExtraStyle(.window)
         .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Time Tracker") { NSApp.orderFrontStandardAboutPanel(nil) }
+            }
             CommandGroup(replacing: .newItem) {
                 Button("New Project…") { delegate.openEditor(.project(nil)) }.keyboardShortcut("n")
                     .disabled(delegate.store.loadFailed)
