@@ -1,4 +1,5 @@
 import AppKit
+import Foundation
 
 let arguments = Array(CommandLine.arguments.dropFirst())
 let manager = FileManager.default

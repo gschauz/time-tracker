@@ -1,4 +1,5 @@
 import AppKit
+import Foundation
 
 let directory = URL(fileURLWithPath: CommandLine.arguments[1])
 try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
