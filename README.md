@@ -4,7 +4,7 @@ A small native macOS app for freelance projects. Built with SwiftUI and AppKit, 
 
 ## Open the app
 
-Open **Time Tracker** from Applications. The `Time Tracker.app` link beside this source folder points to that same installed copy. This build targets Apple silicon Macs running macOS 13 or later and is locally signed. Find the current version in **Time Tracker → About Time Tracker** or the bottom **…** menu.
+Open **Time Tracker** from `~/Documents/Codex/Applications`, or use the link beside this source folder. The `Time Tracker.app` link beside this source folder points to that same installed copy. This build targets Apple silicon Macs running macOS 13 or later and is locally signed. Find the current version in **Time Tracker → About Time Tracker** or the bottom **…** menu.
 
 ## Track a project
 
@@ -46,7 +46,7 @@ The build script creates a temporary app in `../../work/swift-build/package` and
 
 ## Updates and source history
 
-There is one everyday installation: `/Applications/Time Tracker.app`. Each release has a version in `VERSION` and an increasing number in `BUILD_NUMBER`. Source changes are committed to this local Git repository, and verified releases are tagged `v<VERSION>`. No remote publishing is configured.
+There is one everyday installation: `~/Documents/Codex/Applications/Time Tracker.app`. Each release has a version in `VERSION` and an increasing number in `BUILD_NUMBER`. Source changes are committed to this local Git repository, and verified releases are tagged `v<VERSION>`. No remote publishing is configured.
 
 For a user-facing update, finish or cancel any editing form, increment the version/build files, run the appropriate checks, and commit the source changes. Then run:
 
@@ -55,7 +55,7 @@ bash scripts/update.sh
 git tag "v$(cat VERSION)"
 ```
 
-The updater builds and verifies a candidate before gracefully quitting the old app, which saves and pauses timers. It replaces the app in Applications, relaunches it, and checks the **running app’s** version, location, and saved-data load. Only after verification does it move obsolete installed/development/preview bundles to Trash, refresh the output link, and replace the downloadable ZIP. A failed launch/data-load verification restores the previous installation when available. It never force-quits the app or removes project data.
+The updater builds and verifies a candidate before gracefully quitting the old app, which saves and pauses timers. It replaces the managed app in Documents/Codex/Applications, relaunches it, and checks the **running app’s** version, location, and saved-data load. Only after verification does it move obsolete installed/development/preview bundles to Trash, refresh the output link, and replace the downloadable ZIP. A failed launch/data-load verification restores the previous installation when available. It never force-quits the app or removes project data.
 
 The build script alone does not update a running app. Follow `AGENTS.md` for the full release workflow. Older source versions stay in Git for rollback; older application bundles are not kept alongside the current app.
 
@@ -64,7 +64,7 @@ The automated tests cover independent timers, pause/resume accounting, stop sema
 To preview example projects without touching saved data:
 
 ```sh
-open -n "/Applications/Time Tracker.app" --args --demo
+open -n "$HOME/Documents/Codex/Applications/Time Tracker.app" --args --demo
 ```
 
 Demo changes are kept in memory and discarded on quit. Quit the demo instance after previewing; do not use it for real tracking.
