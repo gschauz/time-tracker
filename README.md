@@ -46,7 +46,9 @@ The build script creates a temporary app in `../../work/swift-build/package` and
 
 ## Updates and source history
 
-There is one everyday installation: `~/Documents/Codex/Applications/Time Tracker.app`. Each release has a version in `VERSION` and an increasing number in `BUILD_NUMBER`. Source changes are committed to this local Git repository, and verified releases are tagged `v<VERSION>`. No remote publishing is configured.
+There is one everyday installation: `~/Documents/Codex/Applications/Time Tracker.app`. Each release has a version in `VERSION` and an increasing number in `BUILD_NUMBER`. Source changes are committed to this local Git repository, and verified releases are tagged `v<VERSION>`.
+
+The private GitHub repository is [gschauz/time-tracker](https://github.com/gschauz/time-tracker). Source revisions were imported through the connected GitHub integration, retaining their file contents and commit messages. Imported commits have different IDs from the original local commits. Personal project data, time entries, and built app bundles are not included. Git command-line authentication is not configured on this Mac; repository updates can use the connected GitHub tools.
 
 For a user-facing update, finish or cancel any editing form, increment the version/build files, run the appropriate checks, and commit the source changes. Then run:
 

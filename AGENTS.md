@@ -2,6 +2,8 @@
 
 The user wants one current installed app, automatic cleanup of replaced copies, and real source version history.
 
+The private source repository is `gschauz/time-tracker`, configured as `origin`. The original source history was mirrored through the GitHub connector; remote commit IDs differ from the original local IDs. Use connected GitHub tools for authorized remote updates until CLI authentication is configured. Do not force-push the unrelated original local history over the imported remote history. Preserve both histories.
+
 - The everyday app lives only at `~/Documents/Codex/Applications/Time Tracker.app`. Never launch a separate development bundle for everyday use. The output `Time Tracker.app` is a symbolic link to the installed app, not another copy.
 - Preserve `~/Library/Application Support/TimeTracker/` and the `com.garret.timetracker` preferences. Never remove user project data as part of app cleanup.
 - Before each user-facing release, increment `VERSION` (patch for ordinary changes, minor for features) and `BUILD_NUMBER`. Show the version in About and the footer menu.

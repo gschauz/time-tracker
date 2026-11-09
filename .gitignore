@@ -1,3 +1,10 @@
 .build/
 .swiftpm/
 .DS_Store
+*.app/
+*.zip
+work/
+outputs/
+projects.json*
+.env
+.env.*
