@@ -19,7 +19,7 @@ Open **Time Tracker** from `~/Documents/Codex/Applications`, or use the link bes
 
 Each project is independent; multiple projects can run at once. If you do that, the combined Today figure sums their time, including overlapping intervals.
 
-The stopwatch in the menu bar provides each project’s Start/Resume, Pause, Stop, and Add Time controls. A number beside the icon shows how many projects are running. Add Time opens the main window’s entry form.
+The stopwatch in the menu bar shows each project’s name, client, and **Total time** in hours, matching the main app. Use **Add Time** to open that project’s manual entry form. Saved entries and any current session are included in the total. Timer controls remain available in the main window; running projects also show a Running badge in the dropdown. A number beside the menu bar icon shows how many projects are running.
 
 Closing the main window keeps the app and timers running in the menu bar. Sleeping the Mac or quitting the app pauses all running projects. Wake/relaunch leaves them paused until you resume. Display sleep alone does not pause the timers.
 
@@ -48,7 +48,7 @@ The build script creates a temporary app in `../../work/swift-build/package` and
 
 There is one everyday installation: `~/Documents/Codex/Applications/Time Tracker.app`. Each release has a version in `VERSION` and an increasing number in `BUILD_NUMBER`. Source changes are committed to this local Git repository, and verified releases are tagged `v<VERSION>`.
 
-The private GitHub repository is [gschauz/time-tracker](https://github.com/gschauz/time-tracker). Source revisions were imported through the connected GitHub integration, retaining their file contents and commit messages. Imported commits have different IDs from the original local commits. Personal project data, time entries, and built app bundles are not included. Git command-line authentication is not configured on this Mac; repository updates can use the connected GitHub tools.
+The public GitHub repository is [gschauz/time-tracker](https://github.com/gschauz/time-tracker). Source revisions were imported through the connected GitHub integration, retaining their file contents and commit messages. Imported commits have different IDs from the original local commits. Personal project data, time entries, and built app bundles are not included. Git command-line authentication is not configured on this Mac; repository updates can use the connected GitHub tools.
 
 For a user-facing update, finish or cancel any editing form, increment the version/build files, run the appropriate checks, and commit the source changes. Then run:
 

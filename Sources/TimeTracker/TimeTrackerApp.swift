@@ -152,23 +152,35 @@ struct MenuBarView: View {
                     VStack(spacing: 10) {
                         ForEach(store.projects) { project in
                             VStack(alignment: .leading, spacing: 11) {
+                                HStack(alignment: .top, spacing: 12) {
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text(project.name).font(.system(size: 13, weight: .semibold))
+                                            .lineLimit(2)
+                                        if !project.client.isEmpty {
+                                            Text(project.client).font(.system(size: 11)).foregroundStyle(Theme.secondary)
+                                                .lineLimit(1)
+                                        }
+                                    }
+                                    Spacer(minLength: 0)
+                                    VStack(alignment: .trailing, spacing: 3) {
+                                        Text(TimeText.hours(project.total(at: store.now)))
+                                            .font(.system(size: 23, weight: .semibold)).monospacedDigit()
+                                        Text("Total time").font(.system(size: 10)).foregroundStyle(Theme.secondary)
+                                    }.fixedSize().accessibilityElement(children: .combine)
+                                }
                                 HStack {
-                                    Text(project.name).font(.system(size: 13, weight: .semibold)).lineLimit(1)
+                                    if project.isRunning { StatusBadge(project: project) }
                                     Spacer()
-                                    StatusBadge(project: project)
+                                    Button { show(.manual(project.id)) } label: {
+                                        Label("Add Time", systemImage: "plus")
+                                    }
+                                    .buttonStyle(TrackerButtonStyle(primary: true, compact: true))
+                                    .help("Add time worked earlier").disabled(store.loadFailed)
                                 }
-                                HStack(alignment: .firstTextBaseline) {
-                                    Text(TimeText.clock(project.currentDuration(at: store.now)))
-                                        .font(.system(size: 23, weight: .medium)).monospacedDigit()
-                                    Spacer()
-                                    Text("\(TimeText.hours(project.total(at: store.now))) total")
-                                        .font(.system(size: 10)).foregroundStyle(Theme.secondary).monospacedDigit()
-                                }
-                                TimerControls(store: store, project: project, compact: true) { show(.manual(project.id)) }
                             }.padding(14).background(Theme.card, in: RoundedRectangle(cornerRadius: 12))
                         }
                     }.padding(12)
-                }.frame(height: min(CGFloat(store.projects.count) * 146 + 14, 470))
+                }.frame(height: min(CGFloat(store.projects.count) * 140 + 14, 470))
             }
             Divider().opacity(0.5)
             HStack {

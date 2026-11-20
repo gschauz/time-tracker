@@ -17,7 +17,7 @@ BUILD="$(cat "$ROOT/BUILD_NUMBER")"
 export CLANG_MODULE_CACHE_PATH="$SCRATCH/module-cache"
 export TIME_TRACKER_BUILD_DIR="$SCRATCH"
 export TIME_TRACKER_APP_PATH="$STAGED"
-manage_app() { swift -target "$(uname -m)-apple-macosx13.0" "$ROOT/scripts/manage-app.swift" "$@"; }
+manage_app() { swift -target "$(uname -m)-apple-macosx13.0" -module-cache-path "$SCRATCH/helper-module-cache" "$ROOT/scripts/manage-app.swift" "$@"; }
 
 restore_previous() {
     manage_app stop "$APP"
